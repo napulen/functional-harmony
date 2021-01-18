@@ -28,7 +28,7 @@ class MTL_BLSTM_RNNModel(object):
         self._graph = None
 
         # Summary for training visualization
-        self._graph_path = path + "\\Training"
+        self._graph_path = path + "/Training"
         self._train_writer = None
         self._valid_writer = None
 
@@ -174,8 +174,8 @@ class MTL_BLSTM_RNNModel(object):
             if self._session is None:
                 self._session = tf.Session()
                 print('Saving graph to: %s' % self._graph_path)
-                self._train_writer = tf.summary.FileWriter(self._graph_path + '\\train', self._session.graph)
-                self._valid_writer = tf.summary.FileWriter(self._graph_path + '\\valid', self._session.graph)
+                self._train_writer = tf.summary.FileWriter(self._graph_path + '/train', self._session.graph)
+                self._valid_writer = tf.summary.FileWriter(self._graph_path + '/valid', self._session.graph)
                 init = tf.global_variables_initializer()
                 self._session.run(init)
         else:
@@ -283,8 +283,8 @@ if __name__ == "__main__":
                                  L2_beta=1e-3,
                                  dropout_rate=0.5)
 
-    variable_path = path + "\\Training\\training_model_ckpt"
-    best_variable_path = path + "\\Training\\best_training_model_ckpt"
+    variable_path = path + "/Training/training_model_ckpt"
+    best_variable_path = path + "/Training/best_training_model_ckpt"
     n_epoches = 27 # number of training epochs
     bsize = 36 # batch size
     best_valid_acc, in_succession = 0.0, 0 # log for early stopping

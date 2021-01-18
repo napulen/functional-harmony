@@ -5,6 +5,7 @@ import numpy.lib.recfunctions as rfn
 from scipy import stats
 import itertools
 import os
+import pickle
 
 def strided_axis1(a, window, hop):
 
@@ -25,7 +26,7 @@ def strided_axis1(a, window, hop):
     # Finally use strides to get the 3D array view
     return np.lib.stride_tricks.as_strided(b, shape=(nd1, m, window), strides=(s1*hop, s0, s1))
 
-def load_notes(directory="\\BPS_FH_Dataset\\", resolution=8):
+def load_notes(directory="BPS_FH_Dataset/", resolution=8):
     """
     Load notes in each piece, which is then represented as pianoroll.
     :param directory: the path of the dataset
@@ -37,7 +38,7 @@ def load_notes(directory="\\BPS_FH_Dataset\\", resolution=8):
     pieces = [None for _ in range(32)]
     tdeviation = [None for _ in range(32)] # time deviation
     for i in range(32):
-        fileDir = directory + str(i+1).zfill(2) + "\\notes.csv"
+        fileDir = os.path.join(directory, os.path.join(str(i+1), "notes.csv"))
         notes = np.genfromtxt(fileDir, delimiter=',', dtype=dt) # read notes from .csv file
         length = math.ceil((max(notes[-20:]['onset'] + notes[-20:]['duration']) - notes[0]['onset'])*resolution) # length of the piece
         tdeviation[i] = abs(notes[0]['onset']) # deviation of start time
@@ -52,7 +53,7 @@ def load_notes(directory="\\BPS_FH_Dataset\\", resolution=8):
 
     return pieces, tdeviation
 
-def load_chord_labels(directory="\\BPS_FH_Dataset\\"):
+def load_chord_labels(directory="BPS_FH_Dataset/"):
     """
     Load chords of each piece and add chord symbols into the labels.
     :param directory: the path of the dataset
@@ -62,7 +63,7 @@ def load_chord_labels(directory="\\BPS_FH_Dataset\\"):
     dt = [('onset', 'float'), ('end', 'float'), ('key', '<U10'), ('degree', '<U10'), ('quality', '<U10'), ('inversion', 'int'), ('rchord', '<U10')] # datatype
     chord_labels = [None for _ in range(32)]
     for i in range(32):
-        fileDir = directory + str(i+1).zfill(2) + "\\chords.xlsx"
+        fileDir = os.path.join(directory, os.path.join(str(i+1), "chords.xlsx"))
 
         workbook = xlrd.open_workbook(fileDir)
         sheet = workbook.sheet_by_index(0)
@@ -520,12 +521,15 @@ def get_training_data(label_type=None):
         print('LabelTypeError: %s,' % label_type, 'label_type should be \'chord_symbol\' or \'chord_function\'.')
         quit()
 
-    path = os.path.dirname(os.path.abspath(__file__)) + '\\BPS_FH_Dataset\\'
+    path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'BPS_FH_Dataset/')
     print('load data...')
     pianorolls, tdeviation = load_notes(directory=path)
     chord_labels = load_chord_labels(directory=path)
     print('segment data...')
     segments_pianoroll, segments_label = segment_pianorolls(pianorolls, tdeviation, chord_labels, wsize=32, hsize=4, label_type=label_type)
+    # with open("fout.pck", "wb") as fdout:
+    #     pickle.dump((segments_pianoroll, segments_label), fdout)
+    # quit()
     print('prepare data...')
     input_segments, input_labels = prepare_input_data(segments_pianoroll, segments_label, hop=32, num_steps=64, feature_size=1952, label_type=label_type)
     print('split data...')
