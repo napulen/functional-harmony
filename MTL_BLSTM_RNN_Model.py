@@ -269,9 +269,15 @@ if __name__ == "__main__":
     import random
     import numpy as np
     from preprocessing import get_training_data
+    from preprocessing_aug import get_augmented_training_data
 
     # Prepare training data
     [x_train, x_valid, x_test, y_train, y_valid, y_test] = get_training_data(label_type='chord_function')
+    # Prepare augmented data
+    [x_train_aug, y_train_aug] = get_augmented_training_data(label_type='chord_function')
+    x_train = np.concatenate((x_train, x_train_aug))
+    y_train = np.concatenate((y_train, y_train_aug))
+
     n_sequences_train = x_train.shape[0]
 
     # create model
