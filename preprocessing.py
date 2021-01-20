@@ -490,8 +490,8 @@ def split_input_data(input_segments, input_labels):
 
     # split 32 pieces into three sets
     train_indices = [4, 11, 16, 20, 26, 31, 3, 8, 12, 17, 23, 21, 27, 29, 30, 10, 1, 2]
-    valid_indices = [7, 18, 28, 15, 25, 5, 9]
-    test_indices = [0, 13, 22, 14, 19, 24, 6]
+    valid_indices = [7, 18, 28, 15, 25, 5, 19]
+    test_indices = [0, 13, 22, 14, 9, 24, 6]
 
     inputs_train = np.concatenate([input_segments[m][p] for m in range(12) for p in train_indices], axis=0)
     inputs_valid = np.concatenate([input_segments[0][p] for p in valid_indices], axis=0)

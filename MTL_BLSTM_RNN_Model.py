@@ -274,9 +274,9 @@ if __name__ == "__main__":
     # Prepare training data
     [x_train, x_valid, x_test, y_train, y_valid, y_test] = get_training_data(label_type='chord_function')
     # Prepare augmented data
-    [x_train_aug, y_train_aug] = get_augmented_training_data(label_type='chord_function')
-    x_train = np.concatenate((x_train_aug, x_train))
-    y_train = np.concatenate((y_train_aug, y_train))
+    # [x_train_aug, y_train_aug] = get_augmented_training_data(label_type='chord_function')
+    # x_train = np.concatenate((x_train_aug, x_train))
+    # y_train = np.concatenate((y_train_aug, y_train))
 
     n_sequences_train = x_train.shape[0]
 
