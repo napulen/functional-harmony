@@ -275,8 +275,8 @@ if __name__ == "__main__":
     [x_train, x_valid, x_test, y_train, y_valid, y_test] = get_training_data(label_type='chord_function')
     # Prepare augmented data
     [x_train_aug, y_train_aug] = get_augmented_training_data(label_type='chord_function')
-    x_train = np.concatenate((x_train, x_train_aug))
-    y_train = np.concatenate((y_train, y_train_aug))
+    x_train = np.concatenate((x_train_aug, x_train))
+    y_train = np.concatenate((y_train_aug, y_train))
 
     n_sequences_train = x_train.shape[0]
 
@@ -294,7 +294,7 @@ if __name__ == "__main__":
     n_epoches = 27 # number of training epochs
     bsize = 36 # batch size
     best_valid_acc, in_succession = 0.0, 0 # log for early stopping
-    n_in_succession = 8 # number of accuracy drops before early stopping
+    n_in_succession = 20 # number of accuracy drops before early stopping
 
     startTime = time.time()
     print('\nStart training......')
